@@ -128,7 +128,7 @@ variants      compound-het   findings
 
 Recommended layout:
 
-```text
+```text id="qj0wq8"
 wgs_pipeline/
 ├── Dockerfile
 ├── run_wgs_pipeline.sh
@@ -142,15 +142,12 @@ wgs_pipeline/
 │   ├── wgs_vcf_exomiser_merge.py
 │   └── wgs_variants_prioritizer.py
 │
-├── config/
-│   ├── wgs_pipeline.env.example
-│   ├── hg38application.properties.example
-│   ├── exomiser_wgs_template.yml
-│   ├── secondary_findings_master.tsv
-│   └── database_versions.tsv
-│
-└── docs/
-    └── track1_report.md
+└── config-example/
+    ├── wgs_pipeline.env.example
+    ├── hg38application.properties.example
+    ├── exomiser_wgs_template.yml
+    ├── secondary_findings_master.tsv
+    └── database_versions.tsv
 ```
 
 ---
@@ -192,57 +189,13 @@ This design allows reference/database changes without rebuilding the Docker imag
 
 ## Reference Genome
 
-The current workflow uses:
+The workflow uses:
 
 ```text
 GCA_000001405.15_GRCh38_no_alt_analysis_set.fna
 ```
 
-The FASTA sequence names must match the chromosome naming convention used in the input VCF.
-
-For VCFs using:
-
-```text
-1
-2
-3
-...
-22
-X
-Y
-MT
-```
-
-the FASTA should expose matching sequence names.
-
-If the original FASTA uses:
-
-```text
-chr1
-chr2
-...
-chrX
-chrY
-chrM
-```
-
-the sequence identifiers can be renamed consistently:
-
-```text
-chr1 -> 1
-chr2 -> 2
-chrX -> X
-chrY -> Y
-chrM -> MT
-```
-
-Only the **sequence identifiers** should be changed. The nucleotide sequence must not be modified.
-
-After renaming the FASTA, regenerate the index:
-
-```bash
-samtools faidx GRCh38_no_alt_nochr.fna
-```
+> **Reference compatibility:** Chromosome/contig names in the reference FASTA must match those used in the input VCF (for example, `1` vs `chr1`, and `MT` vs `chrM`). Ensure the naming convention is consistent before running the pipeline.
 
 ---
 
@@ -296,7 +249,7 @@ wgs_pipeline.env
 Example:
 
 ```bash
-REFERENCE_FASTA="/reference/GRCh38_no_alt_nochr.fna"
+REFERENCE_FASTA="/reference/GCA_000001405.15_GRCh38_no_alt_analysis_set.fna"
 
 EXOMISER_PROPERTIES="/config/hg38application.properties"
 
@@ -736,7 +689,7 @@ The secondary-findings branch does **not** require:
 The workflow uses:
 
 ```text
-ClinGen 3.3
+ClinGen SF v3.3
 ```
 
 together with the configured secondary-findings master file.
@@ -894,14 +847,9 @@ ClinGen       3.3
 ```
 
 ---
-
 ## Methods Report
 
-The Hackathon methods description is maintained at:
-
-```text
-docs/track1_report.md
-```
+The Track 1 methods report is submitted separately as part of the hackathon submission.
 
 It includes:
 
@@ -910,7 +858,7 @@ It includes:
 - AI-assistance disclosure
 - compound-heterozygous handling
 - secondary-findings handling
-- runtime/cost information
+- runtime and cost information
 - method abstract
 - strengths and limitations
 
