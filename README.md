@@ -1016,7 +1016,8 @@ Automated prioritization output must not be interpreted as a standalone clinical
 
 ## License
 
-Add the appropriate repository license before public distribution.
+
+This project is licensed under the MIT License. See the `LICENSE` file for details.
 
 ---
 
