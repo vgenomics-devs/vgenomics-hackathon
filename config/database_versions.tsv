@@ -1,0 +1,17 @@
+RESOURCE	VERSION_OR_RELEASE	SOURCE	PURPOSE	NOTES
+Reference genome	GCA_000001405.15_GRCh38_no_alt_analysis_set.fna	NCBI	GRCh38 reference genome	Contig names harmonized with input VCF where required
+Exomiser	15.1.0	Monarch Initiative / Exomiser	Phenotype-driven gene and variant prioritization	Installed in Docker image
+Exomiser data	2602	Monarch Initiative / Exomiser	Phenotype, disease, inheritance, population-frequency and variant evidence	Primary Exomiser data release used by the workflow
+HPO	Included in Exomiser 2602 data release	Exomiser data bundle / Human Phenotype Ontology	Phenotype representation and phenotype similarity	Version inherited from Exomiser 2602 data release
+gnomAD	Included in Exomiser 2602 data release	Exomiser data bundle / gnomAD	Population allele-frequency evidence	Version inherited from Exomiser 2602 data release
+ClinVar	Included in Exomiser 2602 data release	Exomiser data bundle / NCBI ClinVar	Clinical significance evidence	Version inherited from Exomiser 2602 data release
+Other Exomiser phenotype/gene-disease resources	Included in Exomiser 2602 data release	Exomiser data bundle	Gene-disease, phenotype and inheritance evidence	Version inherited from Exomiser 2602 data release
+CADD	v1.7	CADD	Variant pathogenicity prediction	Used where available in Exomiser-derived evidence
+ClinGen	3.3	ClinGen	Secondary-finding and gene-disease guidance	Used for secondary-findings workflow/master list
+REVEL	Included through Exomiser 2602 data release where available	Exomiser data bundle / REVEL	Missense pathogenicity prediction	No separate version assigned beyond Exomiser 2602 release
+SpliceAI	Included through Exomiser 2602 data release where available	Exomiser data bundle / SpliceAI	Splice-effect prediction	No separate version assigned beyond Exomiser 2602 release
+Java	OpenJDK 21	OpenJDK	Exomiser runtime	Installed in Docker image
+bcftools	1.19	HTSlib / bcftools	VCF normalization, filtering and processing	Record exact version from final Docker image
+Python	3.12.3	Python Software Foundation	Pipeline scripting	Record exact version from final Docker image
+Polars	2.0.0	Polars	TSV parsing, merging and prioritization	Record exact version from final Docker image
+Docker image	vgen/wgs-pipeline:0.1	Project repository	Reproducible execution environment	Replace FINAL_TAG with submitted image tag
