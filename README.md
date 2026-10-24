@@ -142,7 +142,7 @@ wgs_pipeline/
 │   ├── wgs_vcf_exomiser_merge.py
 │   └── wgs_variants_prioritizer.py
 │
-├── config-example/
+├── config/
 │   ├── wgs_pipeline.env.example
 │   ├── hg38application.properties.example
 │   ├── exomiser_wgs_template.yml
