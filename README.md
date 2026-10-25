@@ -269,7 +269,6 @@ HET_AB_MAX=0.80
 
 TOP_N=25
 
-PRIMARY_CHROMS="1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,X,Y,MT"
 
 EXOMISER_ASSEMBLY="hg38"
 
@@ -349,18 +348,26 @@ docker run --rm -it \
 
 ## Pipeline Workflow
 
-### Step 1: Primary Chromosome Filtering
+### Step 1: Chromosome Naming and Primary Chromosome Filtering
 
-Default chromosomes:
+The pipeline checks the chromosome naming convention in the input VCF.
+If the VCF uses:
 
 ```text
-1-22, X, Y, MT
+1, 2, ..., 22, X, Y, MT
 ```
 
-Configured through:
+the chromosome names are converted to:
 
 ```text
-PRIMARY_CHROMS
+chr1, chr2, ..., chr22, chrX, chrY, chrM
+```
+
+VCFs already using `chr`-style chromosome names are left unchanged.
+The workflow then retains:
+
+```text
+chr1-chr22, chrX, chrY, chrM
 ```
 
 ### Step 2: Variant Normalization
