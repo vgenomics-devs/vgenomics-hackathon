@@ -257,7 +257,6 @@ MIN_DP="${MIN_DP:-10}"
 MIN_GQ="${MIN_GQ:-20}"
 HET_AB_MIN="${HET_AB_MIN:-0.20}"
 HET_AB_MAX="${HET_AB_MAX:-0.80}"
-PRIMARY_CHROMS="${PRIMARY_CHROMS:-1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,X,Y,MT}"
 TOP_N="${TOP_N:-25}"
 # JAVA_OPTS="${JAVA_OPTS:--Xms4g -Xmx16g}"
 JAVA_XMS="${JAVA_XMS:-4g}"
@@ -378,15 +377,45 @@ FINAL_MERGED="${RESULT_DIR}/${CASE_ID}_wgs_merged.tsv"
 # STEP 1
 # PRIMARY CHROMOSOME FILTER
 # ============================================================
-start_step "STEP 1: Primary chromosome filter"
-bcftools view \
-    --threads "$THREADS" \
-    -r "$PRIMARY_CHROMS" \
-    -Oz \
-    -o "$PRIMARY_VCF" \
-    "$INPUT_VCF"
+# Check first 5 variant chromosome names
+set +o pipefail
+CHROMS=$(bcftools query -f '%CHROM\n' "$INPUT_VCF" | head -n 5)
+set -o pipefail
 
-tabix -f -p vcf "$PRIMARY_VCF"
+# echo "Detected chromosome names:"
+# echo "$CHROMS"
+
+if echo "$CHROMS" | grep -q '^chr'; then
+    echo "VCF already uses chr prefix."
+    VCF_FOR_FILTER="$INPUT_VCF"
+else
+    echo "Adding chr prefix to chromosome names."
+
+    CHR_RENAME_MAP="${OUTPUT_DIR}/${CASE_ID}.chr_rename_map.txt"
+
+    {
+        for chr in {1..22}; do
+            printf "%s\tchr%s\n" "$chr" "$chr"
+        done
+
+        printf "X\tchrX\n"
+        printf "Y\tchrY\n"
+        printf "MT\tchrM\n"
+    } > "$CHR_RENAME_MAP"
+
+    NORMALIZED_CHROM_VCF="${OUTPUT_DIR}/${CASE_ID}.chrom_normalized.vcf.gz"
+
+    bcftools annotate \
+        --threads "$THREADS" \
+        --rename-chrs "$CHR_RENAME_MAP" \
+        -Oz \
+        -o "$PRIMARY_VCF" \
+        "$INPUT_VCF"
+
+    tabix -f -p vcf "$NORMALIZED_CHROM_VCF"
+
+    VCF_FOR_FILTER="$NORMALIZED_CHROM_VCF"
+fi
 end_step
 
 # ============================================================
